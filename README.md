@@ -1,6 +1,12 @@
 # 4n0nym1z3
 4n0nym1z3 is best tools for provides enhanced privacy, anonymity for Debian and Arch based linux distributions
 
+# Supported On
+```
+Kali Linux
+Parrot OS
+```
+
 # Download 4n0nym1z3
 ```
 git clone https://github.com/amirkoshkian/4n0nym1z3

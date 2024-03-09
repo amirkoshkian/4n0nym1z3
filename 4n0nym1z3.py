@@ -5,6 +5,9 @@ from json import load;
 from requests import get, post, exceptions;
 from socks import setdefaultproxy, PROXY_TYPE_SOCKS5, socksocket;
 from socket import socket;
+from time import sleep;
+from scapy.all import Ether, ARP, srp, sniff;
+from multiprocessing import Process;
 
 ############################################################################################## Start Variables
 help_command = """4n0nym1z3 1.0.0 - (C) 2024
@@ -17,7 +20,11 @@ Options:
     swp : start 4n0nym1z3 with proxychains
     stop : stop 4n0nym1z3
     status : show status
-    noise : noise traffic generator random
+    ti : auto tor ip changer
+    am : activate anti mitm
+    n : activate noise traffic generator random
+    tiam : run `ti` and `am`
+    tiamn : run `ti` and `am` and `n`
     0 : kill apps and clear cache
     1 : log killer
     help : show help
@@ -161,6 +168,56 @@ def StartLogKiller():
     system("sudo find / -iname '*.logs.*' -type f -exec sudo rm -r {} \;");
     system("sudo find / -iname '*history' -type f -exec sudo rm -r {} \;");
 # End Section Function Start Log Killer
+
+# Start Section Function Start Auto Tor Ip Changer
+def StartAutoTorIpChanger():
+    print("Started Ip Changer");
+    while True:
+        sleep(30);
+        system("sudo systemctl reload tor");
+        print("Ip Changed");
+# End Section Function Start Auto Tor Ip Changer
+
+# Start Section Function Start Anti Mitm
+def StartAntiMitm():
+    print("Started Anti Mitm");
+    def process(packet):
+        if packet.haslayer(ARP):
+            if packet[ARP].op == 2:
+                try:                
+                    real_mac = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=packet[ARP].psrc), timeout=3, verbose=False)[0][0][1].hwsrc;
+                    response_mac = packet[ARP].hwsrc;
+                    if real_mac != response_mac:
+                        os.system("iptables -A INPUT -m mac --mac-source " + response_mac + " -j DROP");
+                except IndexError:
+                    pass;
+    sniff(store=False, prn=process);
+# End Section Function Start Anti Mitm
+
+# Start Section Function Start Noise Traffic Generator
+def StartNoiseTrafficGenerator():
+    config_json_read = load(open("/usr/share/4n0nym1z3/config.json", "r"));
+    print("Started Noise Traffic Generator");
+    while True:
+        random_url = choice(config_json_read["main_urls"]);
+        random_user_agent = choice(config_json_read["user_agents"]);
+        get_post = randrange(0, 2);
+        try:
+            if get_post == 0:
+                get(url=random_url, headers={"user-agent": random_user_agent}, timeout=2);
+                print(f"GET-request : {random_url}");
+            elif get_post == 1:
+                post(url=random_url, headers={"user-agent": random_user_agent}, timeout=2);
+                print(f"POST-request : {random_url}");
+        except exceptions.HTTPError:
+            pass;
+        except exceptions.ReadTimeout:
+            pass;
+        except exceptions.ConnectionError:
+            pass;
+        except exceptions.RequestException:
+            pass;
+# End Section Function Start Noise Traffic Generator
 ######################################## End Section Start Functions
 
 ######################################## Start Section Stop Functions
@@ -221,31 +278,7 @@ def StopHostnameChanger():
     system("sudo cat /usr/share/4n0nym1z3/data/hostname.txt > /etc/hostname");
     system("sudo rm -r /usr/share/4n0nym1z3/data/hostname.txt");
 # End Section Function Stop Hostname Changer
-
-# Start Section Function Start Noise Traffic Generator
-def NoiseTrafficGenerator():
-    config_json_read = load(open("/usr/share/4n0nym1z3/config.json", "r"));
-    while True:
-        random_url = choice(config_json_read["main_urls"]);
-        random_user_agent = choice(config_json_read["user_agents"]);
-        get_post = randrange(0, 2);
-        try:
-            if get_post == 0:
-                get(url=random_url, headers={"user-agent": random_user_agent}, timeout=2);
-                print(f"GET-request : {random_url}");
-            elif get_post == 1:
-                post(url=random_url, headers={"user-agent": random_user_agent}, timeout=2);
-                print(f"POST-request : {random_url}");
-        except exceptions.HTTPError:
-            pass;
-        except exceptions.ReadTimeout:
-            pass;
-        except exceptions.ConnectionError:
-            pass;
-        except exceptions.RequestException:
-            pass;
-# End Section Function Start Noise Traffic Generator
-# End Section Stop Functions
+######################################## End Section Stop Functions
 ############################################################################################### End Section Functions
 
 ############################################################################################### Start Section Main
@@ -255,7 +288,7 @@ try:
     if path.isfile("/usr/share/4n0nym1z3/data/status.txt") == False:
         system("sudo echo 0 > /usr/share/4n0nym1z3/data/status.txt");
 
-    print("after executing the command 'start or stop', killed apps and clear cache");
+    print("note : after executing the command 'start or stop', killed apps and clear cache");
     print(help_command);
     status = open("/usr/share/4n0nym1z3/data/status.txt", "r");
     
@@ -341,9 +374,38 @@ try:
                 print("4n0nym1z3 successfully disabled");
             else:
                 print("4n0nym1z3 is already disabled");
-        elif (input_4n0nym1z3 == "noise"):
+        elif (input_4n0nym1z3 == "ti"):
             system("sudo clear");
-            NoiseTrafficGenerator();
+            StartAutoTorIpChanger();
+        elif (input_4n0nym1z3 == "am"):
+            system("sudo clear");
+            StartAntiMitm();
+        elif (input_4n0nym1z3 == "n"):
+            system("sudo clear");
+            StartNoiseTrafficGenerator();
+        elif (input_4n0nym1z3 == "tiam"):
+            system("sudo clear");
+            StartAutoTorIpChanger = Process(target=StartAutoTorIpChanger);
+            StartAntiMitm = Process(target=StartAntiMitm);
+            
+            StartAutoTorIpChanger.start();
+            StartAntiMitm.start();
+            
+            StartAutoTorIpChanger.join();
+            StartAntiMitm.join();
+        elif (input_4n0nym1z3 == "tiamn"):
+            system("sudo clear");
+            StartAutoTorIpChanger = Process(target=StartAutoTorIpChanger);
+            StartAntiMitm = Process(target=StartAntiMitm);
+            StartNoiseTrafficGenerator = Process(target=StartNoiseTrafficGenerator);
+                        
+            StartAutoTorIpChanger.start();
+            StartAntiMitm.start();
+            StartNoiseTrafficGenerator.start();
+            
+            StartAutoTorIpChanger.join();
+            StartAntiMitm.join();
+            StartNoiseTrafficGenerator.join();
         elif (input_4n0nym1z3 == "0"):
             system("sudo clear");
             StartKillAppsAndClearCache();
@@ -380,7 +442,9 @@ sudo pip install random2 &&
 sudo pip install simplejson &&
 sudo pip install requests &&
 sudo pip install socks &&
-sudo pip install sockets""");
+sudo pip install sockets &&
+sudo pip install scapy &&
+sudo pip install multiprocessing""");
         elif (input_4n0nym1z3 == "exit"):
             break;
         else:

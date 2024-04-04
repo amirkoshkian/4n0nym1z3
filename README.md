@@ -22,8 +22,8 @@ sudo make install
 
 # Usage 4n0nym1z3
 ```
-sudo 4n0nym1z3
+sudo 4n0nym1z3 -h
 ```
 
 # Image 4n0nym1z3
-![Screenshot_2024-03-09_15-00-10](https://github.com/amirkoshkian/4n0nym1z3/assets/74311184/1b82966e-4365-4de3-aab4-0dfa9017ccdf)
+![image](https://github.com/amirkoshkian/4n0nym1z3/assets/74311184/1595273f-e798-412a-97d8-1fbb6837486a)

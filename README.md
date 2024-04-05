@@ -26,4 +26,4 @@ sudo 4n0nym1z3 -h
 ```
 
 # Image 4n0nym1z3
-![image](https://github.com/amirkoshkian/4n0nym1z3/assets/74311184/1595273f-e798-412a-97d8-1fbb6837486a)
+![image](https://github.com/amirkoshkian/4n0nym1z3/assets/74311184/85836a8b-d0f8-404a-bfee-45a54f82bfd6)

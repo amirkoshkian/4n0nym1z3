@@ -28,8 +28,8 @@ Usage: sudo 4n0nym1z3 -h
 Options:
     -swt : start 4n0nym1z3 with tor
     -swp : start 4n0nym1z3 with proxychains
-    -stop : stop 4n0nym1z3
-    -status : show status
+    -d : stop 4n0nym1z3
+    -s : show status
     -ti : auto tor ip changer
     -am : activate anti mitm
     -n : activate noise traffic generator random
@@ -349,7 +349,7 @@ try:
             print("4n0nym1z3 successfully enabled");
         else:
             print("4n0nym1z3 is already enabled");
-    elif (argv[1] == "-stop"):
+    elif (argv[1] == "-d"):
         system("sudo clear");
         status.seek(0);
         if int(status.read()) == 1:
@@ -415,7 +415,7 @@ try:
         StartKillAppsAndClearCache();
         StartLogKiller();
         system("sudo clear");
-    elif (argv[1] == "-status"):
+    elif (argv[1] == "-s"):
         system("sudo clear");
         status.seek(0);
         if int(status.read()) == 1:

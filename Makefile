@@ -5,7 +5,7 @@ bin_dir=/usr/bin
 install:
 	sudo install -m 755 4n0nym1z3 $(bin_dir)
 	sudo mkdir -p $(src_dir)/$(tool_name)
-	sudo cp -rv ./4n0nym1z3 ./4n0nym1z3.py ./iptables ./config.json /usr/share/4n0nym1z3/
+	sudo cp -rv ./4n0nym1z3 ./iptables ./config.json /usr/share/4n0nym1z3/
 	sudo chmod +rwx /usr/share/4n0nym1z3/iptables
 uninstall:
 	sudo rm -rf $(bin_dir)/$(tool_name)
@@ -15,5 +15,5 @@ reinstall:
 	sudo rm -rf $(src_dir)/$(tool_name)
 	sudo install -m 755 4n0nym1z3 $(bin_dir)
 	sudo mkdir -p $(src_dir)/$(tool_name)
-	sudo cp -rv ./4n0nym1z3 ./4n0nym1z3.py ./iptables ./config.json /usr/share/4n0nym1z3/
+	sudo cp -rv ./4n0nym1z3 ./iptables ./config.json /usr/share/4n0nym1z3/
 	sudo chmod +rwx /usr/share/4n0nym1z3/iptables

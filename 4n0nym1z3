@@ -143,7 +143,21 @@ def StartHostnameChanger():
     random_number = randrange(0, 19);
     hostname_text = hostnames[random_number];
     system(f"sudo echo {hostname_text} > /etc/hostname");
+    StartHostsChanger(hostname_text);
 # End Section Function Start Hostname Changer
+
+# Start Section Function Start Hosts Changer
+def StartHostsChanger(hostname_text):
+    system("sudo cat /etc/hosts > /usr/share/4n0nym1z3/data/hosts.txt");
+    hosts_text = f"""127.0.0.1 localhost
+127.0.1.1 {hostname_text}
+
+# The following lines are desirable for IPv6 capable hosts
+::1 localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters""";
+    system(f"sudo echo {hosts_text} > /etc/hosts");
+# End Section Function Start Hosts Changer
 
 # Start Section Function Start Browser Anonymization
 def StartBrowserAnonymization():
@@ -287,6 +301,12 @@ def StopHostnameChanger():
     system("sudo cat /usr/share/4n0nym1z3/data/hostname.txt > /etc/hostname");
     system("sudo rm -r /usr/share/4n0nym1z3/data/hostname.txt");
 # End Section Function Stop Hostname Changer
+
+# Start Section Function Stop Hosts Changer
+def StopHostsChanger():
+    system("sudo cat /usr/share/4n0nym1z3/data/hosts.txt > /etc/hosts");
+    system("sudo rm -r /usr/share/4n0nym1z3/data/hosts.txt");
+# End Section Function Stop Hosts Changer
 ######################################## End Section Stop Functions
 ############################################################################################### End Section Functions
 
@@ -362,6 +382,8 @@ try:
             StopTimezoneChanger();
             
             StopHostnameChanger();
+            
+            StopHostsChanger();
 
             StartLogKiller();
 

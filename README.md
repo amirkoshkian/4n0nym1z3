@@ -13,7 +13,7 @@ Linux Mint
 sudo apt update
 ```
 ```
-sudo apt install git python3 python3-pip bleachbit iproute2 sed grep findutils iptables tor proxychains4 gnome-terminal -y && sudo pip install random2 simplejson requests python3-socks sockets python3-scapy multiprocessing argv
+sudo apt install git python3 python3-pip bleachbit iproute2 sed grep findutils iptables tor proxychains4 -y && sudo pip install random2 simplejson requests python3-socks sockets python3-scapy multiprocessing argv
 ```
 
 # Download and Installation 4n0nym1z3
